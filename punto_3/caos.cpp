@@ -27,7 +27,7 @@ void actualizar_rk4(int it)
 
 float evaluar_derivada(int cual, float q1, float q2, float p1, float p2)
 {
-	float epsilon = 1.0/1000;
+	float epsilon = 1.2;
 
 	if (cual==0)
 	{
@@ -71,10 +71,10 @@ void calcular_ks(int it)
 	P2k[2] = evaluar_derivada(3, Q1[it]+0.5*dt*Q1k[1], Q2[it]+0.5*dt*Q2k[1], P1[it]+0.5*dt*P1k[1], P2[it]+0.5*dt*P2k[1]);
 
 	//k4
-	Q1k[3] = evaluar_derivada(0, Q1[it]+1.0*dt*Q1k[2], Q2[it]+1.0*dt*Q2k[2], P1[it]+1.0*dt*P1k[2], P2[it]+1.0*dt*P2k[2]);
-	Q2k[3] = evaluar_derivada(1, Q1[it]+1.0*dt*Q1k[2], Q2[it]+1.0*dt*Q2k[2], P1[it]+1.0*dt*P1k[2], P2[it]+1.0*dt*P2k[2]);
-	P1k[3] = evaluar_derivada(2, Q1[it]+1.0*dt*Q1k[2], Q2[it]+1.0*dt*Q2k[2], P1[it]+1.0*dt*P1k[2], P2[it]+1.0*dt*P2k[2]);
-	P2k[3] = evaluar_derivada(3, Q1[it]+1.0*dt*Q1k[2], Q2[it]+1.0*dt*Q2k[2], P1[it]+1.0*dt*P1k[2], P2[it]+1.0*dt*P2k[2]);
+	Q1k[3] = evaluar_derivada(0, Q1[it]+0.5*dt*Q1k[2], Q2[it]+0.5*dt*Q2k[2], P1[it]+0.5*dt*P1k[2], P2[it]+0.5*dt*P2k[2]);
+	Q2k[3] = evaluar_derivada(1, Q1[it]+0.5*dt*Q1k[2], Q2[it]+0.5*dt*Q2k[2], P1[it]+0.5*dt*P1k[2], P2[it]+0.5*dt*P2k[2]);
+	P1k[3] = evaluar_derivada(2, Q1[it]+0.5*dt*Q1k[2], Q2[it]+0.5*dt*Q2k[2], P1[it]+0.5*dt*P1k[2], P2[it]+0.5*dt*P2k[2]);
+	P2k[3] = evaluar_derivada(3, Q1[it]+0.5*dt*Q1k[2], Q2[it]+0.5*dt*Q2k[2], P1[it]+0.5*dt*P1k[2], P2[it]+0.5*dt*P2k[2]);
 }
 
 
@@ -88,15 +88,28 @@ int main()
 	P1[0] = 0.0;
 	P2[0] = 0.0;
 
+	cout << dt << endl;
+
 	ofstream datos_caos("datos_caos.txt");
 
 	for (int i3 = 0; i3 < nt-1; ++i3)
+	//for (int i3 = 0; i3 < 20; ++i3)
 	{
 		calcular_ks(i3);
 		actualizar_rk4(i3);
 
-		datos_caos << Q1[i3] << " " << Q2[i3] << " " << P1[i3] << " " << P2[i3];
-		datos_caos << endl;
+		if ( (Q1[i3] * Q1[i3+1]) < 0)
+		{
+			datos_caos << Q2[i3] << " " << P2[i3];
+			datos_caos << endl;
+		}
+		
+		//cout << Q1[i3] << "\t" << Q2[i3] << "\t" << P1[i3] << "\t" << P2[i3] << "\t";
+//		for (int i = 0; i < 4; ++i)
+//		{
+//			cout << " " << P2k[i];
+//		}
+//		cout << endl;
 	}
 
 	

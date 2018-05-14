@@ -5,6 +5,15 @@ import matplotlib.pyplot as plt
 
 
 D = genfromtxt("datos_caos.txt", delimiter=' ')
+q2 = D[:,0]
+p2 = D[:,1]
+
+plt.figure()
+plt.xlabel('q2')
+plt.ylabel('p2')
+plt.plot(q2,p2)
+plt.savefig("caos.pdf")
+
 #II = ~any(isnan(D),0)
 #D = D[:,II] # Quitar Nans
 
